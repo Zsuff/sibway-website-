@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120" viewBox="0 0 200 120">
+  <defs>
+    <g id="ch">
+      <path d="M0 0 L22 26 L0 52" fill="none" stroke="currentColor" stroke-width="11"
+            stroke-linecap="butt" stroke-linejoin="miter"/>
+    </g>
+  </defs>
+  <g color="#FFFFFF">
+    <use href="#ch" x="6" y="6"/>
+    <use href="#ch" x="52" y="6"/>
+    <use href="#ch" x="98" y="6"/>
+    <use href="#ch" x="144" y="6"/>
+    <use href="#ch" x="29" y="64"/>
+    <use href="#ch" x="75" y="64"/>
+    <use href="#ch" x="121" y="64"/>
+    <use href="#ch" x="167" y="64"/>
+  </g>
+</svg>
