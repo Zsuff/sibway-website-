@@ -900,33 +900,6 @@ table.data td:first-child { font-weight: 600; color: var(--violet); }
 .problem dd { margin: 0 0 0.5rem; color: var(--gray-700); }
 .problem dd:last-child { margin-bottom: 0; }
 
-/* ---------- GEO links ---------- */
-
-.geo-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-}
-
-.geo-links a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0.5rem 1.1rem;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--text-sm);
-  color: var(--violet);
-}
-
-.geo-links a:hover { border-color: var(--blue); color: var(--blue-dark); }
-.geo-links a svg { width: 1rem; height: 1rem; color: var(--blue); }
-
 /* ---------- CTA band ---------- */
 
 .cta-band {
