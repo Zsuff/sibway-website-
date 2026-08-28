@@ -1037,6 +1037,13 @@ table.data td:first-child { font-weight: 600; color: var(--violet); }
   font-weight: 600;
 }
 
+.form__status[data-state="pending"] {
+  display: block;
+  background: var(--gray-50);
+  color: var(--gray-700);
+  border: 1px solid var(--border);
+}
+
 .form__status[data-state="error"] {
   display: block;
   background: #fdecea;
@@ -1051,7 +1058,22 @@ table.data td:first-child { font-weight: 600; color: var(--violet); }
   border: 1px solid #b7e2f4;
 }
 
+/* Honeypot: приховане поле-пастка для ботів. Люди його не бачать і не
+   потрапляють у нього табом; заповнене поле означає автоматичну відправку. */
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .form-card .btn { grid-column: 1 / -1; }
+
+.form-grid button[type="submit"][disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
 
 @media (min-width: 640px) { .form-card .btn { justify-self: start; } }
 
