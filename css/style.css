@@ -903,8 +903,8 @@ table.data td:first-child { font-weight: 600; color: var(--violet); }
 /* ---------- CTA band ---------- */
 
 .cta-band {
-  background: var(--violet);
-  color: var(--white);
+  background: var(--bg-tint);
+  color: var(--gray-700);
   padding-block: var(--section-y);
   position: relative;
   overflow: hidden;
@@ -914,21 +914,28 @@ table.data td:first-child { font-weight: 600; color: var(--violet); }
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("../img/brand/pattern-chevron-white.svg");
+  background-image: url("../img/brand/pattern-chevron.svg");
   background-size: 200px 120px;
   background-repeat: repeat;
   background-position: center;
-  opacity: 0.09;
+  opacity: 0.07;
   -webkit-mask-image: radial-gradient(120% 120% at 50% 50%, transparent 35%, #000 100%);
   mask-image: radial-gradient(120% 120% at 50% 50%, transparent 35%, #000 100%);
   pointer-events: none;
 }
 
 .cta-band > .container { position: relative; text-align: center; max-width: 48rem; }
-.cta-band h2 { color: var(--white); }
-.cta-band h2::after { background: var(--blue); }
-.cta-band p { color: rgba(255, 255, 255, 0.82); font-size: var(--text-lg); }
+.cta-band h2 { color: var(--violet); }
+.cta-band h2::after { background: var(--blue-darker); }
+.cta-band p { color: var(--gray-700); font-size: var(--text-lg); }
 .cta-band .btn-row { justify-content: center; }
+
+/* Кнопки CTA на світлому фоні: глобальні .btn--primary і .btn--on-dark
+   лишаються без змін, перевизначення діє тільки в межах смуги. */
+.cta-band .btn--primary { background: var(--blue-darker); border-color: var(--blue-darker); }
+.cta-band .btn--primary:hover { background: var(--violet); border-color: var(--violet); }
+.cta-band .btn--on-dark { background: var(--white); border-color: var(--violet); color: var(--violet); }
+.cta-band .btn--on-dark:hover { background: var(--violet); border-color: var(--violet); color: var(--white); }
 
 /* ---------- Form ---------- */
 
