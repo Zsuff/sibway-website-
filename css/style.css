@@ -238,6 +238,9 @@ strong { font-weight: 700; }
 @media (min-width: 900px) {
   .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-8); }
   .split--wide-first { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); }
+  /* У розмітці текст іде перед зображенням, щоб у згорнутій колонці заголовок
+     розділяв два фото. У дві колонки повертаємо зображення ліворуч. */
+  .split--media-first > .hero__media { order: -1; }
 }
 
 .split--top { align-items: start; }
