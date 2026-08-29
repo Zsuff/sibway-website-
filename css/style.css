@@ -1061,7 +1061,8 @@ table.data td:first-child { font-weight: 600; color: var(--violet); }
 
 .contact-grid { display: grid; gap: var(--space-3); }
 
-@media (min-width: 900px) { .contact-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 640px) { .contact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .contact-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
 .contact-card {
   background: var(--white);
@@ -1105,6 +1106,7 @@ table.data td:first-child { font-weight: 600; color: var(--violet); }
 
 .messengers a:hover { background: var(--blue); color: var(--white); border-color: var(--blue); }
 .messengers svg { width: 1.35rem; height: 1.35rem; }
+
 
 /* ---------- Legal / pending ---------- */
 
@@ -1164,6 +1166,22 @@ table.data td:first-child { font-weight: 600; color: var(--violet); }
 .footer a { color: rgba(255, 255, 255, 0.78); }
 .footer a:hover { color: var(--white); }
 .footer address { font-style: normal; display: grid; gap: 0.6rem; }
+
+/* Іконки месенджерів у footer: світлі на прозорій плитці.
+   Оголошені після .footer a / .footer a:hover, щоб перекрити їх колір. */
+.messengers--footer { margin-top: 0.75rem; }
+
+.footer .messengers--footer a {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: var(--white);
+}
+
+.footer .messengers--footer a:hover {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--violet);
+}
 
 .footer__bottom {
   margin-top: var(--space-5);
