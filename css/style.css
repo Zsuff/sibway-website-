@@ -684,6 +684,12 @@ strong { font-weight: 700; }
   .ticks--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.875rem var(--space-4); }
 }
 
+/* Секція «Географія перевезень»: список стоїть у половинній колонці поруч
+   із фото, де два стовпці затісні. Локально повертаємо один стовпець. */
+@media (min-width: 900px) {
+  .transport-geography .ticks--2 { grid-template-columns: minmax(0, 1fr); }
+}
+
 .ticks li {
   position: relative;
   padding-inline-start: 1.9rem;
