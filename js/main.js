@@ -164,3 +164,69 @@
     });
   });
 })();
+
+/* --- Cookie notice: інформаційне повідомлення про cookies/GA4 ---
+   Суто інформаційне: не блокує, не вмикає й не вимикає жодну аналітику.
+   Не використовує cookies — лише localStorage, без персональних даних. */
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "sibway-cookie-notice-dismissed";
+  var notice = document.querySelector("[data-cookie-notice]");
+  if (!notice) return;
+
+  var dismissBtn = notice.querySelector("[data-cookie-notice-dismiss]");
+  var reopenBtns = document.querySelectorAll("[data-cookie-notice-reopen]");
+  var lastOpener = null;
+
+  var storageGet = function () {
+    try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+  };
+  var storageSet = function () {
+    try { localStorage.setItem(STORAGE_KEY, "1"); } catch (e) { /* ignore */ }
+  };
+  var storageClear = function () {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+  };
+
+  var hide = function () {
+    notice.hidden = true;
+    if (lastOpener) {
+      lastOpener.focus();
+      lastOpener = null;
+    }
+  };
+
+  var show = function (opener) {
+    lastOpener = opener || null;
+    notice.hidden = false;
+    if (dismissBtn) dismissBtn.focus();
+  };
+
+  var dismiss = function () {
+    storageSet();
+    hide();
+  };
+
+  /* Перший показ: без взаємодії користувача, без переведення фокусу. */
+  if (!storageGet()) {
+    notice.hidden = false;
+  }
+
+  if (dismissBtn) {
+    dismissBtn.addEventListener("click", dismiss);
+  }
+
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && !notice.hidden) {
+      dismiss();
+    }
+  });
+
+  reopenBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      storageClear();
+      show(btn);
+    });
+  });
+})();

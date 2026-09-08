@@ -1229,3 +1229,77 @@ table.data td:first-child { font-weight: 600; color: var(--violet); }
   .nav { inset: 4rem 0 auto; }
   .lang a { padding: 0.35rem 0.45rem; }
 }
+
+/* ---------- Cookie notice ---------- */
+/* Суто інформаційний банер: не керує й не блокує аналітику. */
+
+.cookie-notice {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 201;
+  background: var(--violet);
+  color: rgba(255, 255, 255, 0.9);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.cookie-notice[hidden] { display: none; }
+
+.cookie-notice__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding-block: var(--space-2);
+}
+
+.cookie-notice__text {
+  flex: 1 1 18rem;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.cookie-notice__text a {
+  color: var(--white);
+  text-decoration: underline;
+}
+
+.cookie-notice__text a:hover { color: rgba(255, 255, 255, 0.8); }
+
+.cookie-notice__button {
+  flex: 0 0 auto;
+  min-height: 2.5rem;
+  padding: 0.6rem 1.25rem;
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--violet);
+}
+
+.cookie-notice__button:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 620px) {
+  .cookie-notice__inner { flex-direction: column; align-items: stretch; }
+  .cookie-notice__button { width: 100%; }
+}
+
+/* Кнопка повторного відкриття в footer — виглядає як існуючі footer-посилання. */
+button.footer__link {
+  display: block;
+  width: auto;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: rgba(255, 255, 255, 0.78);
+  text-align: left;
+  cursor: pointer;
+}
+
+button.footer__link:hover { color: var(--white); }
