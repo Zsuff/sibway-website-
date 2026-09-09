@@ -33,8 +33,8 @@
   --border-soft: var(--gray-100);
 
   /* Типографіка (brand/DESIGN.md, розділ 3) */
-  --font-display: "TT Norms", "Manrope", Arial, sans-serif;
-  --font-body: "Gilroy", "Inter", Arial, sans-serif;
+  --font-display: "Manrope", Arial, sans-serif;
+  --font-body: "Inter", Arial, sans-serif;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -935,8 +935,6 @@ table.data td:first-child { font-weight: 600; color: var(--violet); }
 
 /* Кнопки CTA на світлому фоні: глобальні .btn--primary і .btn--on-dark
    лишаються без змін, перевизначення діє тільки в межах смуги. */
-.cta-band .btn--primary { background: var(--blue-darker); border-color: var(--blue-darker); }
-.cta-band .btn--primary:hover { background: var(--violet); border-color: var(--violet); }
 .cta-band .btn--on-dark { background: var(--white); border-color: var(--violet); color: var(--violet); }
 .cta-band .btn--on-dark:hover { background: var(--violet); border-color: var(--violet); color: var(--white); }
 
