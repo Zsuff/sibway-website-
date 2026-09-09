@@ -187,26 +187,31 @@
       general: {
         title: "Заявка на розрахунок",
         helper: "Опишіть вашу задачу — це допоможе нам підготувати точний розрахунок або відповідь.",
+        label: "Опишіть вантаж, маршрут і терміни",
         placeholder: "Наприклад: 20 палет, Польща — Україна, дата готовності вантажу."
       },
       transport: {
         title: "Заявка на розрахунок перевезення",
         helper: "Вкажіть дані про вантаж і маршрут — це потрібно для точного прорахунку перевезення.",
+        label: "Опишіть вантаж, маршрут і терміни",
         placeholder: "Наприклад: 20 палет, Польща — Україна, дата готовності вантажу."
       },
       customs: {
         title: "Запит щодо митного оформлення",
         helper: "Опишіть товар і етап митного оформлення — це допоможе зрозуміти ваш запит.",
+        label: "Опишіть товар і етап митного оформлення",
         placeholder: "Наприклад: країна відправлення, тип товару, код УКТ ЗЕД — якщо відомий, дата прибуття."
       },
       warehouse: {
         title: "Запит щодо складських послуг",
         helper: "Вкажіть тип вантажу, потрібні складські операції та орієнтовний період.",
+        label: "Опишіть вантаж і потрібні складські послуги",
         placeholder: "Наприклад: тип вантажу, кількість палет або місць, потрібні операції та орієнтовний період."
       },
       audit: {
         title: "Запит на логістичний аудит",
         helper: "Опишіть поточну логістичну задачу та що саме потрібно покращити.",
+        label: "Опишіть вашу логістичну задачу",
         placeholder: "Наприклад: напрямки перевезень, поточна задача та що потрібно покращити."
       }
     },
@@ -214,26 +219,31 @@
       general: {
         title: "Request a quote",
         helper: "Describe your request — this will help us prepare an accurate quote or response.",
+        label: "Describe your cargo, route and deadlines",
         placeholder: "E.g.: 20 pallets, Poland — Ukraine, cargo ready date."
       },
       transport: {
         title: "Request a transport quote",
         helper: "Share your cargo and route details — we need them to prepare an accurate transport quote.",
+        label: "Describe your cargo, route and deadlines",
         placeholder: "E.g.: 20 pallets, Poland — Ukraine, cargo ready date."
       },
       customs: {
         title: "Customs clearance enquiry",
         helper: "Describe the goods and the current customs-clearance stage — this will help us understand your request.",
+        label: "Describe the goods and customs-clearance stage",
         placeholder: "E.g.: country of dispatch, type of goods, UKTZED code — if known, arrival date."
       },
       warehouse: {
         title: "Warehousing services enquiry",
         helper: "Specify the cargo type, required warehouse operations and estimated period.",
+        label: "Describe your cargo and required warehouse services",
         placeholder: "E.g.: cargo type, number of pallets or units, required operations and estimated period."
       },
       audit: {
         title: "Logistics audit request",
         helper: "Describe your current logistics challenge and what you would like to improve.",
+        label: "Describe your logistics challenge",
         placeholder: "E.g.: transport directions, current task and what needs improving."
       }
     },
@@ -241,26 +251,31 @@
       general: {
         title: "Zapytanie o wycenę",
         helper: "Opisz swoje zapytanie — pomoże nam to przygotować dokładną wycenę lub odpowiedź.",
+        label: "Opisz ładunek, trasę i terminy",
         placeholder: "Np.: 20 palet, Polska — Ukraina, data gotowości ładunku."
       },
       transport: {
         title: "Zapytanie o wycenę transportu",
         helper: "Podaj dane o ładunku i trasie — są potrzebne do dokładnej wyceny transportu.",
+        label: "Opisz ładunek, trasę i terminy",
         placeholder: "Np.: 20 palet, Polska — Ukraina, data gotowości ładunku."
       },
       customs: {
         title: "Zapytanie o odprawę celną",
         helper: "Opisz towar i etap odprawy celnej — pomoże nam to zrozumieć Twoje zapytanie.",
+        label: "Opisz towar i etap odprawy celnej",
         placeholder: "Np.: kraj wysyłki, rodzaj towaru, kod CN/UKTZED — jeśli znany, data przybycia."
       },
       warehouse: {
         title: "Zapytanie o usługi magazynowe",
         helper: "Podaj rodzaj ładunku, wymagane operacje magazynowe i orientacyjny okres.",
+        label: "Opisz ładunek i wymagane usługi magazynowe",
         placeholder: "Np.: rodzaj ładunku, liczba palet lub miejsc, wymagane operacje i orientacyjny okres."
       },
       audit: {
         title: "Zapytanie o audyt logistyczny",
         helper: "Opisz aktualne wyzwanie logistyczne i co chcesz usprawnić.",
+        label: "Opisz swoje wyzwanie logistyczne",
         placeholder: "Np.: kierunki przewozów, obecne zadanie i co wymaga usprawnienia."
       }
     }
@@ -288,6 +303,10 @@
     var serviceInput = form.querySelector("[data-quote-service]");
     var messageEl = form.querySelector("[data-quote-message]");
     var languageInput = form.querySelector('input[name="language"]');
+    /* Опційний елемент: label textarea. На відміну від полів вище він не
+       входить до обов'язкового guard нижче — якщо атрибут десь відсутній,
+       title/helper/placeholder все одно продовжують працювати як раніше. */
+    var messageLabelEl = form.querySelector("[data-quote-message-label]");
 
     /* Форма без потрібних data-атрибутів (наприклад, форма на головній
        сторінці) — не чіпаємо: жодних нових DOM-вузлів, жодних помилок,
@@ -305,6 +324,7 @@
       titleEl.textContent = entry.title;
       helperEl.textContent = entry.helper;
       messageEl.setAttribute("placeholder", entry.placeholder);
+      if (messageLabelEl && entry.label) messageLabelEl.textContent = entry.label;
       serviceInput.value = service;
     };
 
