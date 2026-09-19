@@ -29,7 +29,9 @@ JavaScript, assets) для мовних версій `/uk/`, `/en/`, `/pl/`. В�
 ```text
 локальна зміна (MacBook власника) → локальна валідація → приймання
 власником → commit/push → PR → код-рев'ю → merge у main →
-ручний SFTP-деплой (FileZilla), виконує власник
+SFTP-деплой (FileZilla) на вже автентифікованій сесії власника —
+виконує власник особисто або Claude Code через computer-use,
+за окремим дозволом на цей конкретний деплой
 ```
 
 Деталі кожного кроку — у `docs/DEPLOYMENT.md` репозиторію вимог.
@@ -46,8 +48,11 @@ JavaScript, assets) для мовних версій `/uk/`, `/en/`, `/pl/`. В�
 
 ## Середовища
 
-- Production: `https://sibway.com.ua` — публікація виключно вручну,
-  через SFTP (FileZilla), виконує власник особисто.
+- Production: `https://sibway.com.ua` — публікація через SFTP
+  (FileZilla) на вже автентифікованій сесії власника; виконує власник
+  особисто або, за окремим явним дозволом на кожен конкретний деплой,
+  Claude Code через computer-use. Hosting credentials Claude Code не
+  отримує й не зберігає в жодному разі.
 
 `preview.sibway.com.ua` видалено власником і більше не існує; окремого
 staging/QA-середовища між `main` і production немає.
