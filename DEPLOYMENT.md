@@ -27,8 +27,9 @@ JavaScript, assets) для мовних версій `/uk/`, `/en/`, `/pl/`. В�
 ## Lifecycle (коротко)
 
 ```text
-локальна зміна → локальна валідація → приймання власником →
-commit/push → preview deploy → QA → production approval/deploy
+локальна зміна (MacBook власника) → локальна валідація → приймання
+власником → commit/push → PR → код-рев'ю → merge у main →
+ручний SFTP-деплой (FileZilla), виконує власник
 ```
 
 Деталі кожного кроку — у `docs/DEPLOYMENT.md` репозиторію вимог.
@@ -37,7 +38,7 @@ commit/push → preview deploy → QA → production approval/deploy
 
 - без ручних правок коду безпосередньо на хостингу;
 - без деплою з uncommitted стану;
-- без production deploy без попереднього preview acceptance;
+- без production deploy без окремого дозволу власника на цей deploy;
 - без secrets, release-архівів чи backup-файлів у Git цього
   репозиторію;
 - без automatic deploy або SFTP remote write без окремого явного
@@ -45,9 +46,11 @@ commit/push → preview deploy → QA → production approval/deploy
 
 ## Середовища
 
-- Preview: `https://preview.sibway.com.ua` — захищений Basic Auth;
-  Basic Auth не вимикається без окремого дозволу власника.
-- Production: `https://sibway.com.ua`.
+- Production: `https://sibway.com.ua` — публікація виключно вручну,
+  через SFTP (FileZilla), виконує власник особисто.
+
+`preview.sibway.com.ua` видалено власником і більше не існує; окремого
+staging/QA-середовища між `main` і production немає.
 
 ## Перед commit
 
