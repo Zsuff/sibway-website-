@@ -1,4 +1,69 @@
 /* Sibway Logistics — мінімальний UI-скрипт */
+
+/* --- UTM/gclid: захоплення першого дотику (first-touch) ---
+   Читає utm_source/utm_medium/utm_campaign/utm_content/utm_term/gclid із
+   поточного URL. Якщо для параметра вже є збережене значення (sessionStorage
+   або cookie) — НЕ перезаписує його: перший зафіксований дотик лишається
+   джерелом істини на весь час сесії/30 днів. Значення дублюються в
+   sessionStorage (швидкий доступ у межах вкладки) і в cookie на 30 днів
+   (переживає закриття вкладки), без сторонніх бібліотек. */
+(function () {
+  "use strict";
+
+  var PARAMS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid"];
+  var PREFIX = "sibway_";
+  var MAX_AGE_DAYS = 30;
+
+  var getCookie = function (name) {
+    var match = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+    return match ? decodeURIComponent(match[1]) : null;
+  };
+
+  var setCookie = function (name, value) {
+    var maxAge = MAX_AGE_DAYS * 24 * 60 * 60;
+    document.cookie = name + "=" + encodeURIComponent(value) +
+      "; max-age=" + maxAge + "; path=/; SameSite=Lax; Secure";
+  };
+
+  var read = function (key) {
+    var name = PREFIX + key;
+    var value = null;
+    try { value = sessionStorage.getItem(name); } catch (e) { /* ignore */ }
+    if (!value) value = getCookie(name);
+    return value || "";
+  };
+
+  var store = function (key, value) {
+    var name = PREFIX + key;
+    try { sessionStorage.setItem(name, value); } catch (e) { /* ignore */ }
+    setCookie(name, value);
+  };
+
+  var params;
+  try {
+    params = new URLSearchParams(window.location.search);
+  } catch (e) {
+    params = null;
+  }
+
+  if (params) {
+    PARAMS.forEach(function (key) {
+      var value = params.get(key);
+      if (!value) return;
+      if (read(key)) return; /* first-touch: наявне значення не чіпаємо */
+      store(key, value);
+    });
+  }
+
+  /* Публічний геттер: повертає всі 6 значень (порожній рядок, якщо
+     нічого не збережено). Використовується формою заявки перед відправкою. */
+  window.__sibwayAttribution = function () {
+    var result = {};
+    PARAMS.forEach(function (key) { result[key] = read(key); });
+    return result;
+  };
+})();
+
 (function () {
   "use strict";
 
@@ -115,6 +180,17 @@
         return;
       }
 
+      /* UTM/gclid: підставляємо збережені (first-touch) значення в приховані
+         поля форми прямо перед відправкою — якщо форма їх має (наразі лише
+         contacts.html; на інших сторінках безпечний no-op). */
+      if (typeof window.__sibwayAttribution === "function") {
+        var attribution = window.__sibwayAttribution();
+        ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid"].forEach(function (key) {
+          var field = form.querySelector('[name="' + key + '"]');
+          if (field) field.value = attribution[key] || "";
+        });
+      }
+
       /* Пастка для ботів: поле приховане, тож людина його не заповнить.
          Мовчки вдаємо успіх, щоб не підказувати боту про перевірку. */
       if (honeypot && honeypot.value !== "") {
@@ -141,10 +217,30 @@
       })
         .then(function (response) {
           if (response.ok) {
+            /* Значення service/language читаємо ДО form.reset() — reset()
+               повертає приховані поля до HTML-дефолтів (service="general"),
+               тож подія має відображати те, що реально відправлено. */
+            var serviceField = form.querySelector('[name="service"]');
+            var languageField = form.querySelector('[name="language"]');
+            var serviceValue = serviceField ? serviceField.value : "general";
+            var languageValue = languageField ? languageField.value : (document.documentElement.getAttribute("lang") || "");
+
             form.reset();
             if (typeof form.__reapplyQuoteService === "function") form.__reapplyQuoteService();
             clearInvalid();
             show("success", messages.success);
+
+            /* GTM: form_success — рівно один раз, лише після підтвердженого
+               HTTP-успіху відповіді Formspree (не в обробнику submit і не
+               до відповіді сервера). Кнопку вже заблоковано через setBusy(true)
+               на час запиту, тож повторний клік під час очікування неможливий. */
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+              event: "form_success",
+              service: serviceValue,
+              language: languageValue
+            });
+
             return;
           }
           return response.json().then(
@@ -403,5 +499,43 @@
       storageClear();
       show(btn);
     });
+  });
+})();
+
+/* --- Мікроконверсії: кліки по tel:/mailto:/месенджерах ---
+   Один делегований обробник на document — покриває посилання в шапці,
+   підвалі та будь-де в контенті без прив'язки до конкретних елементів.
+   Навігацію не блокуємо (без preventDefault): tel:/mailto:/месенджер
+   відкриваються як завжди, dataLayer.push фіксується одразу після кліку. */
+(function () {
+  "use strict";
+
+  var MESSENGERS = [
+    { test: /wa\.me/i, type: "whatsapp" },
+    { test: /t\.me/i, type: "telegram" },
+    { test: /^viber:/i, type: "viber" }
+  ];
+
+  document.addEventListener("click", function (ev) {
+    var link = ev.target.closest ? ev.target.closest("a[href]") : null;
+    if (!link) return;
+    var href = link.getAttribute("href") || "";
+
+    window.dataLayer = window.dataLayer || [];
+
+    if (/^tel:/i.test(href)) {
+      window.dataLayer.push({ event: "click_phone" });
+      return;
+    }
+    if (/^mailto:/i.test(href)) {
+      window.dataLayer.push({ event: "click_email" });
+      return;
+    }
+    for (var i = 0; i < MESSENGERS.length; i++) {
+      if (MESSENGERS[i].test.test(href)) {
+        window.dataLayer.push({ event: "click_messenger", messenger_type: MESSENGERS[i].type });
+        return;
+      }
+    }
   });
 })();
