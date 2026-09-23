@@ -539,3 +539,30 @@
     }
   });
 })();
+
+
+/* (затверджено 2026-09-23) Лічильники в блоці цифр на головній «набігають»
+   від нуля при появі на екрані. Лише UA-версія; значення беруться з HTML. */
+(function () {
+  if (document.documentElement.lang !== "uk") return;
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var els = document.querySelectorAll(".stat__value");
+  if (!els.length || !("IntersectionObserver" in window)) return;
+  function run(el) {
+    var raw = el.textContent.trim();
+    var m = raw.match(/^(\D*)([\d\s]+)(.*)$/);
+    if (!m) return;
+    var target = parseInt(m[2].replace(/\s/g, ""), 10), start = null, dur = 1400;
+    function step(ts) {
+      if (!start) start = ts;
+      var k = Math.min(1, (ts - start) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = m[1] + Math.round(target * e) + m[3];
+      if (k < 1) requestAnimationFrame(step); else el.textContent = raw;
+    }
+    requestAnimationFrame(step);
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { run(en.target); io.unobserve(en.target); } });
+  }, { threshold: 0.6 });
+  els.forEach(function (el) { io.observe(el); });
+})();
